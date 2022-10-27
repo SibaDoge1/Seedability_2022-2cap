@@ -2,12 +2,16 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="./popup.css" />
+    <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
   </head>
   <body>
-    <button id="test" class="btn">Test</button>
+    <iframe id="sandboxFrame" src="index.html" width="1000" height="1000"></iframe>
 
+    <button id="test" class="btn">Test</button>
     <textarea id="url" placeholder="Enter Image URL"></textarea>
     <button id="analyze" class="btn">Analyze!</button>
     <script src="./popup.js"></script>
   </body>
+
+
 </html>
