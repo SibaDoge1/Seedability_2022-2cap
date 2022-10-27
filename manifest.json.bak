@@ -1,0 +1,10 @@
+{
+	"manifest_version": 3,	//Manifest V3
+	"name": "Seedability",
+	"description": "Help readability",
+	"version": "0.1",
+
+	"action": {
+	  "default_popup": "test.html"
+	}
+}
