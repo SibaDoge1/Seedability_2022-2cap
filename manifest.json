@@ -1,7 +1,7 @@
 {
   "name": "Seedability",
   "version": "0.0.1",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "description": "Help readability",
   "icons": {
     "16": "icons/icon16.png",
@@ -12,7 +12,7 @@
     "service_worker": "src/bg/background.js"
 	},
   "default_locale": "en",
-  "action": {
+  "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "page action demo",
     "default_popup": "src/popup/popup.html"
@@ -20,18 +20,12 @@
   "sandbox": {
     "pages": [ "src/popup/index.html" ]
   },
-  "content_security_policy": {
-    "extension_page":"script-src 'self' 'unsafe-eval'; object-src 'self'",
-    "sandbox":"sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
- },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": [
 		"activeTab",
 		"webRequest",
     "tts",
     "ttsEngine"
-  ],
-  "host_permissions": [
-    "*://*/*"
   ],
   "content_scripts": [
     {
