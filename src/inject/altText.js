@@ -18,20 +18,21 @@ window.addEventListener('DOMContentLoaded', function(e){
     // }
   console.log(filtered)
   for(var [idx, ele]  of filtered.entries()){
-    if(maxCnt < 2){      
+    if(curCnt < maxCnt){      
       //ele.crossOrigin = ""
       chrome.runtime.sendMessage({
         cmd: "runLogic",
         idx: idx,
         src: ele.src
       });
-      maxCnt++
+      curCnt++
     }
   }
 })
 
 filtered = []
 pendingCnt = 0;
+curCnt = 0;
 maxCnt = 0;
 proxyServer = "https://justcors.com/tl_d7ab8ec/"
 
