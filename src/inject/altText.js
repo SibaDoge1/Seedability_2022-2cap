@@ -1,7 +1,3 @@
-
-// send a message to the background requesting our business logic
-
-// listen for messages from the background
 chrome.runtime.onMessage.addListener(message => {
   // should we render our converted image?
   if (message.imageData) {
@@ -20,10 +16,17 @@ window.addEventListener('DOMContentLoaded', function(e){
   for(var [idx, ele]  of filtered.entries()){
     if(curCnt < maxCnt){      
       //ele.crossOrigin = ""
+      // ele.alt ="이미지 분석중입니다."
+      // const attrs = ele.getAttributeNames().reduce((acc, name) => {
+      //   return {...acc, [name]: ele.getAttribute(name)};
+      // }, {});
+      
+      // // 👇️ {id: 'blue', 'data-id': 'example', class: 'box'}
+      // console.log(attrs);
       chrome.runtime.sendMessage({
         cmd: "runLogic",
         idx: idx,
-        src: ele.src
+        src: ele.src == "" ? ele.dataset.src:ele.src
       });
       curCnt++
     }
@@ -37,14 +40,14 @@ maxCnt = 0;
 proxyServer = "https://justcors.com/tl_d7ab8ec/"
 
 async function analyzeImage(imageSrc, imageData, idx){
-  console.log("image: " + imageSrc)
   const api = "https://2022cap-vision.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Description"
   const tmp = await fetch(imageData)
   const blob = await tmp.blob()
+  console.log(idx+" image: " + imageSrc)
   console.log(blob)
   console.log(idx)
 
-  await until(()=>pendingCnt<10)
+  await until(()=>pendingCnt<9)
   pendingCnt++
   const res = await fetch(api,{
     method:'POST',
@@ -75,18 +78,18 @@ function createText(node, text){
 }
 
 
-async function getBinaryImage(img) {
-  // var res = await fetch(img.src)
-  // var blob = await res.blob()
-  var canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
-  var ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0, img.width, img.height);
-  document.body.appendChild(canvas)
-  const blob = await new Promise(resolve => canvas.toBlob(resolve));
-  return blob;
-}
+// async function getBinaryImage(img) {
+//   // var res = await fetch(img.src)
+//   // var blob = await res.blob()
+//   var canvas = document.createElement("canvas");
+//   canvas.width = img.width;
+//   canvas.height = img.height;
+//   var ctx = canvas.getContext("2d");
+//   ctx.drawImage(img, 0, 0, img.width, img.height);
+//   document.body.appendChild(canvas)
+//   const blob = await new Promise(resolve => canvas.toBlob(resolve));
+//   return blob;
+// }
 
 
 const until = (predFn) => {
