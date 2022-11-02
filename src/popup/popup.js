@@ -1,4 +1,4 @@
-function onImageURL(){
+function analyzeImage(){
   const api = "https://2022cap-vision.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Categories,Description&details=Landmarks"
   const image = document.getElementById("url").value
   const body = {
@@ -27,7 +27,7 @@ function onImageURL(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById("analyze").onclick = onImageURL;
+  document.getElementById("analyze").onclick = analyzeImage;
 });
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
