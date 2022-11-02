@@ -26,11 +26,9 @@ function onImageURL(){
   );
 }
 
-document.addEventListener("DOMContentLoaded",function(){
-  const btn = document.querySelector("#analyze")
-  console.log(btn)
-  btn.addEventListener("click",onImageURL)
-})
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById("analyze").onclick = onImageURL;
+});
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
 //   chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
