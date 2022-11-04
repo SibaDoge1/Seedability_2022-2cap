@@ -29,17 +29,7 @@ imgElement2.onload = function () {
     let mask_inv = new cv.Mat();
     
     cv.bitwise_not(mask, mask_inv);
-    /*
-    for (let i = 0; i < mask.rows; i++) {
-        for (let j = 0; j < mask.cols; j++) {
-            if (mask.ucharPtr(i, j)[0] === 255) {
-                src.ucharPtr(i, j)[0] = dst.ucharPtr(i, j)[0]
-                src.ucharPtr(i, j)[1] = dst.ucharPtr(i, j)[1]
-                src.ucharPtr(i, j)[2] = dst.ucharPtr(i, j)[2]
-                src.ucharPtr(i, j)[3] = dst.ucharPtr(i, j)[3]
-            }
-        }
-    }*/
+
     cv.imshow('canvasOutput', dst);
     
     for (let i = 0; i < mask_inv.rows; i++) {
