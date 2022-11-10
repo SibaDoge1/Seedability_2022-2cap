@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link rel="stylesheet" href="./popup.css" />
-    <style>
-      body{ filter: url(#protanopia); }
-   </style>
-    <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
-  </head>
-  <body>
-    <div>
-      <div class="inputoutput">
-          <img id="imageSrc" alt="No Image" />
-          <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
-      </div>
-      <div class="inputoutput">
-          <canvas id="canvasOutput"></canvas>
-          <div class="caption">canvasOutput</div>
-      </div>
-  </div>
-
-  <script async src ="./opencv.js" ></script>
-  <script src="./getImage.js"></script>
-  <button id="test" class="btn">Test</button>
-  <textarea id="url" placeholder="Enter Image URL"></textarea>
-  <button id="analyze" class="btn">Analyze!</button>
-  <script src="./popup.js"></script>
-
-  <svg id="svg-filter">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg 
+  xmlns="http://www.w3.org/2000/svg"
+  version="1.1">
+  <defs>
     <filter id="protanopia">
       <feColorMatrix
         in="SourceGraphic"
@@ -99,8 +75,5 @@
                 0.163, 0.320, 0.516, 0, 0
                 0,     0,     0,     1, 0"/>
     </filter>
-  </svg>
-  </body>
-
-
-</html>
+  </defs>
+</svg>

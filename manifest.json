@@ -9,7 +9,7 @@
     "128": "icons/icon128.png"
   },
 	"background":{
-    "service_worker": "src/bg/background.js"
+    "scripts": ["src/bg/background.js", "src/popup/opencv.js"]
 	},
   "default_locale": "en",
   "browser_action": {
@@ -22,6 +22,9 @@
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": [
+    "*://*/*",
+    "tabs",
+    "scripting",
 		"activeTab",
 		"webRequest",
     "tts",
@@ -32,11 +35,17 @@
       "matches": [
         "*://*/*"
       ],
+      "run_at": "document_start",
       "js": [
         "src/popup/opencv.js",
-        "src/inject/inject.js",
+        "src/inject/altText.js",
+        "src/inject/symbol.js",
+        "src/inject/filter.js",
         "src/inject/elementScaler.js"
       ]
     }
+  ],
+  "web_accessible_resources": [
+    "filters.svg"
   ]
 }
