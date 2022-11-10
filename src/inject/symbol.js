@@ -31,7 +31,7 @@ function findAndSendImg(){
 
 filtered = []
 curCnt = 0;
-maxCnt = 0;
+maxCnt = 9999;
 
 async function showImg(url, idx){
   const tmp = await fetch(url)
