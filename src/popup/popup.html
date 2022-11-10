@@ -2,27 +2,39 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="./popup.css" />
+    <style>
+      body{ filter: url(#protanopia); }
+   </style>
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
   </head>
   <body>
     <div>
       <div class="inputoutput">
-          <img id="imageSrc" alt="No Image" />
+          <img id="imageSrc" alt="No Image"/>
           <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
       </div>
       <div class="inputoutput">
           <canvas id="canvasOutput"></canvas>
           <div class="caption">canvasOutput</div>
       </div>
-  </div>
-
-  <script async src ="./opencv.js" ></script>
-  <script src="./getImage.js"></script>
-    <button id="test" class="btn">Test</button>
-    <textarea id="url" placeholder="Enter Image URL"></textarea>
-    <button id="analyze" class="btn">Analyze!</button>
+      <div class="inputoutput">
+        <img id="imageSrc2" alt="No Image"/>
+        <div class="caption">imageSrc2 <input type="file" id="fileInput2" name="file" /></div>
+      </div>
+      <div class="inputoutput">
+        <canvas id="canvasOutput2"></canvas>
+        <div class="caption">canvasOutput2</div>
+      </div>
+      <div class="inputoutput">
+        <canvas id="canvasOutput3"></canvas>
+        <div class="caption">canvasOutput3</div>
+      </div>
+    </div>
+    <script async src ="./opencv.js" ></script>
+    <script src="./getImage.js"></script>
+      <button id="test" class="btn">Test</button>
+      <textarea id="url" placeholder="Enter Image URL"></textarea>
+      <button id="analyze" class="btn">Analyze!</button>
     <script src="./popup.js"></script>
   </body>
-
-
 </html>
