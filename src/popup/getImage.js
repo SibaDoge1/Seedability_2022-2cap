@@ -52,9 +52,7 @@ function add_pattern(x, y){
 
     let mani = new cv.Mat();
 
-    //cv.add(src, src2, mani);
-    cv.addWeighted(x,0.7,  y,0.3, 0.0, mani);
-    //cv.bitwise_or(x, y, mani);
+    cv.bitwise_xor(x, y, mani);
 
     cv.imshow('canvasOutput2', y);
 
@@ -72,19 +70,38 @@ imgElement.onload = function () {
     let edge = new cv.Mat();
     let dst = new cv.Mat();
 
+    let temp =src.clone();
+
     //add_pattern(src, src2);
     
     cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
 	
 	cv.Canny(src, edge, 50, 100, 3, false);
 
-    cv.bitwise_or(src, edge, dst);
+    cv.bitwise_xor(src, edge, dst);
 
+    /*
+    let rgbaPlanes = new cv.MatVector();
+    let mergedPlanes = new cv.MatVector();
 
-    cv.imshow('canvasOutput', edge);
+    cv.split(temp, rgbaPlanes);
 
+    let R = rgbaPlanes.get(0);
+    let G = rgbaPlanes.get(1);
+    let B = rgbaPlanes.get(2);
+
+    mergedPlanes.push_back(R);
+    mergedPlanes.push_back(G);
+    mergedPlanes.push_back(B);
+
+    let test = new cv.Mat();
+    cv.merge(mergedPlanes, test);*/
+
+    cv.imshow('canvasOutput', dst);
+d
     src.delete();
     dst.delete();
+    edge.delete();
     
 
 
