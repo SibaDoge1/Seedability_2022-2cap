@@ -6,6 +6,33 @@
       #panel {
         padding: 10px;
       }
+
+      .btn-group button {
+        background-color: #f8f9fd;
+        border: 1px solid black; 
+        color: black; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-align: center;
+        width: 100px;
+      }
+
+      /* Clear floats (clearfix hack) */
+      .btn-group:after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      .btn-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+      }
+
+      /* Add a background color on hover */
+      .btn-group button:hover {
+        background-color: #dedee2;
+      }
     </style>
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
   </head>
@@ -14,6 +41,11 @@
     <hr>
     <div id="panel">
       <div>
+        <div class="btn-group">
+          <button id="protan">Prota<br>nopia</button>
+          <button id="deuteran">Deutera<br>nopia</button>
+          <button id="tritan">Trita<br>nopia</button>
+        </div>
         <div class="inputoutput">
             <img id="imageSrc" alt="No Image"/>
             <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>

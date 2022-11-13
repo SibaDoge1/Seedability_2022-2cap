@@ -28,7 +28,8 @@
 		"activeTab",
 		"webRequest",
     "tts",
-    "ttsEngine"
+    "ttsEngine",
+    "storage"
   ],
   "content_scripts": [
     {

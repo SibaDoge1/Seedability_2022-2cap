@@ -1,3 +1,22 @@
+function setState(key, value) {
+  state = {};
+  state[key] = value;
+
+  chrome.storage.sync.set(state, function() {
+    console.log(key + ' state was stored: ' + state[key]);
+  });
+
+  chrome.tabs.query({}, tabs => {
+    tabs.forEach(tab => {
+      chrome.tabs.sendMessage(tab.id, { type: "refreshFilter" });
+    });
+  });
+}
+
+function sendMessage() {
+  
+}
+
 function analyzeImage(){
   const api = "https://2022cap-vision.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Categories,Description&details=Landmarks"
   const image = document.getElementById("url").value
@@ -28,6 +47,9 @@ function analyzeImage(){
 
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById("analyze").onclick = analyzeImage;
+  document.getElementById("protan").addEventListener('click', function() { setState('colorBlind', 'protanopia'); });
+  document.getElementById("deuteran").addEventListener('click', function() { setState('colorBlind', 'deuteranopia'); });
+  document.getElementById("tritan").addEventListener('click', function() { setState('colorBlind', 'tritanopia'); });
 });
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
