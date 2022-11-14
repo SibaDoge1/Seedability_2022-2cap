@@ -1,20 +1,48 @@
-function setState(key, value) {
-  state = {};
-  state[key] = value;
+function setColorBlindState(value) {
+  let recentState;
 
-  chrome.storage.sync.set(state, function() {
-    console.log(key + ' state was stored: ' + state[key]);
-  });
+  chrome.storage.sync.get(['colorBlind'], function(result) {
+    console.log('colorBlind state was stored: ' + result.colorBlind);
+    console.log(result);
 
-  chrome.tabs.query({}, tabs => {
-    tabs.forEach(tab => {
-      chrome.tabs.sendMessage(tab.id, { type: "refreshFilter" });
-    });
+    if (result != null) {
+      recentState = result.colorBlind;
+      
+      console.log(recentState);
+      console.log(value);
+
+      var state = {};
+      if (recentState == value) {
+        state['colorBlind'] = 'null';
+      } else {
+        state['colorBlind'] = value;
+      }
+
+      chrome.storage.sync.set(state, function() {
+        console.log('colorBlind state was stored: ' + state.colorBlind);
+      });
+
+      chrome.tabs.query({}, tabs => {
+        tabs.forEach(tab => {
+          chrome.tabs.sendMessage(tab.id, { type: "refreshFilter" });
+        });
+      });
+
+      refreshButton();
+    }
   });
 }
 
-function sendMessage() {
-  
+function refreshButton() {
+  document.getElementById('protanopia').style.background='#ffffff';
+  document.getElementById('deuteranopia').style.background='#ffffff';
+  document.getElementById('tritanopia').style.background='#ffffff';
+
+  chrome.storage.sync.get(['colorBlind'], function(result) {
+    if (result != null && result.colorBlind != 'null') {
+      document.getElementById(result.colorBlind).style.background='#dedee2';
+    }
+  });
 }
 
 function analyzeImage(){
@@ -46,10 +74,12 @@ function analyzeImage(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
+  refreshButton();
+
   document.getElementById("analyze").onclick = analyzeImage;
-  document.getElementById("protan").addEventListener('click', function() { setState('colorBlind', 'protanopia'); });
-  document.getElementById("deuteran").addEventListener('click', function() { setState('colorBlind', 'deuteranopia'); });
-  document.getElementById("tritan").addEventListener('click', function() { setState('colorBlind', 'tritanopia'); });
+  document.getElementById("protanopia").addEventListener('click', function() { setColorBlindState('protanopia'); });
+  document.getElementById("deuteranopia").addEventListener('click', function() { setColorBlindState('deuteranopia'); });
+  document.getElementById("tritanopia").addEventListener('click', function() { setColorBlindState('tritanopia'); });
 });
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
