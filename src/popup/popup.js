@@ -1,25 +1,25 @@
-function setColorBlindState(value) {
+function setState(key, value) {
   let recentState;
 
-  chrome.storage.sync.get(['colorBlind'], function(result) {
-    console.log('colorBlind state was stored: ' + result.colorBlind);
+  chrome.storage.sync.get([key], function(result) {
+    console.log(key + ' state was stored: ' + result.colorBlind);
     console.log(result);
 
     if (result != null) {
-      recentState = result.colorBlind;
+      recentState = result[key];
       
       console.log(recentState);
       console.log(value);
 
       var state = {};
       if (recentState == value) {
-        state['colorBlind'] = 'null';
+        state[key] = 'null';
       } else {
-        state['colorBlind'] = value;
+        state[key] = value;
       }
 
       chrome.storage.sync.set(state, function() {
-        console.log('colorBlind state was stored: ' + state.colorBlind);
+        console.log(key + ' state was stored: ' + state.colorBlind);
       });
 
       chrome.tabs.query({}, tabs => {
@@ -38,9 +38,28 @@ function refreshButton() {
   document.getElementById('deuteranopia').style.background='#ffffff';
   document.getElementById('tritanopia').style.background='#ffffff';
 
-  chrome.storage.sync.get(['colorBlind'], function(result) {
-    if (result != null && result.colorBlind != 'null') {
-      document.getElementById(result.colorBlind).style.background='#dedee2';
+  document.getElementById('filter').style.background='#ffffff';
+  document.getElementById('simbol').style.background='#ffffff';
+  document.getElementById('edge').style.background='#ffffff';
+  document.getElementById('expension').style.background='#ffffff';
+
+  chrome.storage.sync.get(['colorBlind', 'filter', 'simbol', 'edge', 'expension'], function(result) {
+    if (result != null) {
+      if (result.colorBlind != null && result.colorBlind != 'null') {
+        document.getElementById(result.colorBlind).style.background='#dedee2';
+      }
+      if (result.filter != null && result.filter != 'null') {
+        document.getElementById('filter').style.background='#dedee2';
+      }
+      if (result.simbol != null && result.simbol != 'null') {
+        document.getElementById('simbol').style.background='#dedee2';
+      }
+      if (result.edge != null && result.edge != 'null') {
+        document.getElementById('edge').style.background='#dedee2';
+      }
+      if (result.expension != null && result.expension != 'null') {
+        document.getElementById('expension').style.background='#dedee2';
+      }
     }
   });
 }
@@ -77,9 +96,14 @@ document.addEventListener('DOMContentLoaded', function(){
   refreshButton();
 
   document.getElementById("analyze").onclick = analyzeImage;
-  document.getElementById("protanopia").addEventListener('click', function() { setColorBlindState('protanopia'); });
-  document.getElementById("deuteranopia").addEventListener('click', function() { setColorBlindState('deuteranopia'); });
-  document.getElementById("tritanopia").addEventListener('click', function() { setColorBlindState('tritanopia'); });
+  document.getElementById("protanopia").addEventListener('click', function() { setState('colorBlind', 'protanopia'); });
+  document.getElementById("deuteranopia").addEventListener('click', function() { setState('colorBlind', 'deuteranopia'); });
+  document.getElementById("tritanopia").addEventListener('click', function() { setState('colorBlind', 'tritanopia'); });
+
+  document.getElementById("filter").addEventListener('click', function() { setState('filter', 'True'); });
+  document.getElementById("simbol").addEventListener('click', function() { setState('simbol', 'True'); });
+  document.getElementById("edge").addEventListener('click', function() { setState('edge', 'True'); });
+  document.getElementById("expension").addEventListener('click', function() { setState('expension', 'True'); });
 });
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
