@@ -1,12 +1,12 @@
 let imgElement = document.getElementById('imageSrc');
-let imgElement2 = document.getElementById('imageSrc2');
 let inputElement = document.getElementById('fileInput');
-let inputElement2 = document.getElementById('fileInput2')
+
+let imgPattern = document.getElementById("imgPattern");
+//패턴 이미지 숨기기
+imgPattern.style.display = 'none';
+
 inputElement.addEventListener('change', (e) => {
     imgElement.src = URL.createObjectURL(e.target.files[0]);
-}, false);
-inputElement2.addEventListener('change', (e) => {
-    imgElement2.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
 
@@ -64,26 +64,40 @@ function add_pattern(x, y){
 
 }
 
+
 imgElement.onload = function () {
     let src = cv.imread(imgElement);
-    //let src2 = cv.imread(imgElement2);
+
+    //패턴 이미지
+    let src3 = cv.imread(imgPattern);
+
     let edge = new cv.Mat();
     let dst = new cv.Mat();
 
-    let temp =src.clone();
+    //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
+    let rsize = new cv.Mat();
+    //변경할 사이즈(imgElement로부터 받아옴)
+    let dsize = new cv.Size(imgElement.width, imgElement.height);
+    cv.resize(src3, rsize, dsize, 0, 0, cv.INTER_AREA);
 
-    //add_pattern(src, src2);
+    let temp =src.clone();
+    
+    //add_pattern(src, rsize);
+    //console.log(this.height);
+
     
     cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
 	
-	cv.Canny(src, edge, 50, 100, 3, false);
+	cv.Canny(temp, edge, 50, 100, 3, false);
 
     cv.bitwise_xor(src, edge, dst);
+    cv.imshow('canvasOutput', dst);
+
+
+    //let rgbaPlanes = new cv.MatVector();
+    //let mergedPlanes = new cv.MatVector();
 
     /*
-    let rgbaPlanes = new cv.MatVector();
-    let mergedPlanes = new cv.MatVector();
-
     cv.split(temp, rgbaPlanes);
 
     let R = rgbaPlanes.get(0);
@@ -92,13 +106,13 @@ imgElement.onload = function () {
 
     mergedPlanes.push_back(R);
     mergedPlanes.push_back(G);
-    mergedPlanes.push_back(B);
+    mergedPlanes.push_back(B);*/
 
-    let test = new cv.Mat();
-    cv.merge(mergedPlanes, test);*/
+    //let test = new cv.Mat();
+    //cv.merge(mergedPlanes, test);
 
-    cv.imshow('canvasOutput', dst);
-d
+
+
     src.delete();
     dst.delete();
     edge.delete();
