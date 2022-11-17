@@ -13,9 +13,9 @@ inputElement.addEventListener('change', (e) => {
     imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
-function edge_detection(rsize){
+function edge_detection(r){
     let edge = new cv.Mat();
-    cv.Canny(rsize, edge, 50, 100, 3, false);
+    cv.Canny(r, edge, 50, 100, 3, false);
 
     let edge_rgba = new cv.Mat();
     cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
@@ -114,7 +114,7 @@ function add_pattern(x){
     cv.add(rsize, edge_rgba, edge_dst);
     //cv.imshow('canvasOutput2', rsize);*/
 
-    let edge_dst = edge_detection(rsize);
+    let edge_dst = edge_detection(dst);
 
     //image manipulation
     //cv.bitwise_or(src, rsize, mani);
