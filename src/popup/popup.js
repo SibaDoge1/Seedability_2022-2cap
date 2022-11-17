@@ -112,15 +112,26 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById("edge").addEventListener('click', function() { setState('edge', 'True'); });
   document.getElementById("expension").addEventListener('click', function() { setState('expension', 'True'); });
 
-  var slider = document.getElementById("myRange");
   var output = document.getElementById("value");
-  output.innerHTML = slider.value;
-  
-  slider.addEventListener('input', function() {
-    output.innerHTML = this.value;
+  var slider = document.getElementById("myRange")
 
-    chrome.storage.sync.set({ fontSize: parseInt(this.value.innerHTML) }, function() {
-      console.log('fontSize state was stored: ' + parseInt(this.value.innerHTML));
+  chrome.storage.sync.get(['fontSize'], function(result) {
+    if (result != null) {
+      if (result.fontSize != null) {
+        output.innerText = result.fontSize;
+        slider.value = result.fontSize;
+      }
+    }
+  });
+
+  document.getElementById("myRange").addEventListener('input', function() {
+    output.innerHTML = slider.value;
+
+    var state = {};
+    state.fontSize = parseInt(slider.value);
+
+    chrome.storage.sync.set(state, function() {
+      console.log('fontSize state was stored: ' + state.fontSize);
     });
   });
 });
