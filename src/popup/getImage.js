@@ -71,8 +71,12 @@ imgElement.onload = function () {
     //패턴 이미지
     let src3 = cv.imread(imgPattern);
 
+    let dstx = new cv.Mat();
+    let dsty = new cv.Mat();
+
     let edge = new cv.Mat();
     let dst = new cv.Mat();
+    let dst2 = new cv.Mat();
 
     //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
     let rsize = new cv.Mat();
@@ -84,14 +88,36 @@ imgElement.onload = function () {
     
     //add_pattern(src, rsize);
     //console.log(this.height);
-
     
-    cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
+    cv.cvtColor(src, temp, cv.COLOR_RGB2GRAY, 0);
+    //cv.Sobel(src, dstx, cv.CV_8U, 1, 0, 3, 1, 0, cv.BORDER_DEFAULT);
+    //cv.Sobel(src, dsty, cv.CV_8U, 0, 1, 3, 1, 0, cv.BORDER_DEFAULT);
 	
 	cv.Canny(temp, edge, 50, 100, 3, false);
 
-    cv.bitwise_xor(src, edge, dst);
-    cv.imshow('canvasOutput', dst);
+    //let white_low = new cv.Mat(edge.rows, edge.cols, edge.type(), [0, 0, 0, 0]);
+    //let white_high = new cv.Mat(edge.rows, edge.cols, edge.type(),  [0, 0, 255, 255]);
+    //let white_dst = new cv.Mat();
+
+    //cv.inRange(edge, white_low, white_high, white_dst);
+
+    //console.log(edge);
+    //console.log(src);
+    //console.log(temp);
+    //console.log(white_dst);
+
+    let edge_rgb = new cv.Mat();
+
+    cv.cvtColor(edge, edge_rgb, cv.COLOR_GRAY2RGBA, 0);
+    console.log(edge_rgb);
+
+    cv.add(src, edge_rgb, dst);
+    cv.imshow('canvasOutput', src);
+    cv.imshow('canvasOutput2', edge_rgb);
+    cv.imshow('canvasOutput3', dst);
+
+
+    
 
 
     //let rgbaPlanes = new cv.MatVector();
