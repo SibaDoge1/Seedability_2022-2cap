@@ -13,6 +13,16 @@ inputElement.addEventListener('change', (e) => {
     imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
+function edge_detection(rsize){
+    let edge = new cv.Mat();
+    cv.Canny(rsize, edge, 50, 100, 3, false);
+
+    let edge_rgba = new cv.Mat();
+    cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
+    
+
+    return edge_rgba;
+}
 
 
 function add_pattern(x){
@@ -104,16 +114,21 @@ function add_pattern(x){
     cv.add(rsize, edge_rgba, edge_dst);
     //cv.imshow('canvasOutput2', rsize);*/
 
-    //image manipulation
-    cv.bitwise_or(src, rsize, mani);
-    cv.bitwise_or(mani, rsize2, mani);
+    let edge_dst = edge_detection(rsize);
 
-    cv.imshow('canvasOutput', mani);
+    //image manipulation
+    //cv.bitwise_or(src, rsize, mani);
+    //cv.bitwise_or(mani, rsize2, mani);
 
     //addWeighted
     cv.addWeighted(src, 1.0, rsize,0.2, 0,  mani2);
     cv.addWeighted(mani2, 1.0, rsize2,0.2, 0,  mani2);
-    cv.imshow('canvasOutput2', rsize2);
+
+    cv.add(edge_dst, mani2, mani);
+    
+    cv.imshow('canvasOutput', edge_dst);
+
+    cv.imshow('canvasOutput2', mani);
 
     cv.imshow('canvasOutput3', mani2);
 
