@@ -28,7 +28,8 @@
 		"activeTab",
 		"webRequest",
     "tts",
-    "ttsEngine"
+    "ttsEngine",
+    "storage"
   ],
   "content_scripts": [
     {
@@ -40,8 +41,7 @@
         "src/popup/opencv.js",
         "src/inject/altText.js",
         "src/inject/symbol.js",
-        "src/inject/filter.js",
-        "src/inject/elementScaler.js"
+        "src/inject/filter.js"
       ]
     }
   ],

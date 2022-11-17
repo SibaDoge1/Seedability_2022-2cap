@@ -3,38 +3,76 @@
   <head>
     <link rel="stylesheet" href="./popup.css" />
     <style>
-      body{ filter: url(#protanopia); }
-   </style>
+      #panel {
+        padding: 10px;
+      }
+
+      .btn-group button {
+        background-color: #f8f9fd;
+        border: 1px solid black; 
+        color: black; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-align: center;
+        width: 100px;
+      }
+
+      /* Clear floats (clearfix hack) */
+      .btn-group:after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      .btn-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+      }
+
+      /* Add a background color on hover */
+      .btn-group button:hover {
+        background-color: #dedee2;
+      }
+    </style>
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
   </head>
   <body>
-    <div>
-      <div class="inputoutput">
-          <img id="imageSrc" alt="No Image"/>
-          <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+    <h1 style="padding-left:10px">Seedability</h1>
+    <hr>
+    <div id="panel">
+      <div>
+        <div class="btn-group">
+          <button id="protanopia">Prota<br>nopia</button>
+          <button id="deuteranopia">Deutera<br>nopia</button>
+          <button id="tritanopia">Trita<br>nopia</button>
+        </div>
+        <div class="inputoutput">
+            <img id="imageSrc" alt="No Image"/>
+            <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
+        </div>
+        <div class="inputoutput">
+            <canvas id="canvasOutput"></canvas>
+            <div class="caption">canvasOutput</div>
+        </div>
+        <div class="inputoutput">
+          <img id="imageSrc2" alt="No Image"/>
+          <div class="caption">imageSrc2 <input type="file" id="fileInput2" name="file" /></div>
+        </div>
+        <div class="inputoutput">
+          <canvas id="canvasOutput2"></canvas>
+          <div class="caption">canvasOutput2</div>
+        </div>
+        <div class="inputoutput">
+          <canvas id="canvasOutput3"></canvas>
+          <div class="caption">canvasOutput3</div>
+        </div>
       </div>
-      <div class="inputoutput">
-          <canvas id="canvasOutput"></canvas>
-          <div class="caption">canvasOutput</div>
-      </div>
-      <div class="inputoutput">
-        <img id="imageSrc2" alt="No Image"/>
-        <div class="caption">imageSrc2 <input type="file" id="fileInput2" name="file" /></div>
-      </div>
-      <div class="inputoutput">
-        <canvas id="canvasOutput2"></canvas>
-        <div class="caption">canvasOutput2</div>
-      </div>
-      <div class="inputoutput">
-        <canvas id="canvasOutput3"></canvas>
-        <div class="caption">canvasOutput3</div>
-      </div>
+      <script async src ="./opencv.js" ></script>
+      <script src="./getImage.js"></script>
+        <button id="test" class="btn">Test</button>
+        <textarea id="url" placeholder="Enter Image URL"></textarea>
+        <button id="analyze" class="btn">Analyze!</button>
+      <script src="./popup.js"></script>
     </div>
-    <script async src ="./opencv.js" ></script>
-    <script src="./getImage.js"></script>
-      <button id="test" class="btn">Test</button>
-      <textarea id="url" placeholder="Enter Image URL"></textarea>
-      <button id="analyze" class="btn">Analyze!</button>
-    <script src="./popup.js"></script>
   </body>
 </html>
