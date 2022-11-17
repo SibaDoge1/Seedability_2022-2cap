@@ -55,13 +55,13 @@
     <div id="panel">
       <div>
         <div class="btn-group">
-          <button id="protanopia">Prota<br>nopia</button>
-          <button id="deuteranopia">Deutera<br>nopia</button>
-          <button id="tritanopia">Trita<br>nopia</button>
+          <button id="fixProtanopia">Prota<br>nopia</button>
+          <button id="fixDeuteranopia">Deutera<br>nopia</button>
+          <button id="fixTritanopia">Trita<br>nopia</button>
         </div>
         <div class="btns">
           <button id="filter">Apply Filter</button>
-          <button id="simbol">Apply Simbol</button>
+          <button id="symbol">Apply Symbol</button>
           <button id="edge">Apply EdgeDetection</button>
           <button id="expension">Apply Expension</button>
         </div>
@@ -111,5 +111,11 @@
         <div class="caption">imgPattern3</div>
       </div>
     </div>
+    <script async src ="./opencv.js" ></script>
+      <script src="./getImage.js"></script>
+        <button id="test" class="btn">Test</button>
+        <textarea id="url" placeholder="Enter Image URL"></textarea>
+        <button id="analyze" class="btn">Analyze!</button>
+      <script src="./popup.js"></script>
   </body>
 </html>

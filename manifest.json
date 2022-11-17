@@ -9,16 +9,13 @@
     "128": "icons/icon128.png"
   },
 	"background":{
-    "scripts": ["src/bg/background.js", "src/popup/opencv.js"]
+    "page": "src/bg/background.html"
 	},
   "default_locale": "en",
   "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "page action demo",
     "default_popup": "src/popup/popup.html"
-  },
-  "sandbox": {
-    "pages": [ "src/popup/index.html" ]
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": [
@@ -41,7 +38,8 @@
         "src/popup/opencv.js",
         "src/inject/altText.js",
         "src/inject/symbol.js",
-        "src/inject/filter.js"
+        "src/inject/filter.js",
+        "src/inject/elementScaler.js"
       ]
     }
   ],

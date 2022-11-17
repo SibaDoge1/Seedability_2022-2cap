@@ -16,18 +16,18 @@ inputElement.addEventListener('change', (e) => {
 
 
 function add_pattern(x){
-    //target image
-    let src = cv.imread(x);
+      //target image
+  let src = cv.imread(x);
 
     //mask
     let dst = new cv.Mat();
     let dst2 = new cv.Mat();
     let dst3 = new cv.Mat();
 
-    //symbol
-    let y = cv.imread(imgPattern);
-    let y2 = cv.imread(imgPattern2);
-    let y3 = cv.imread(imgPattern3);
+  //symbol
+  let y = cv.imread(imgPattern);
+  let y2 = cv.imread(imgPattern2);
+  let y3 = cv.imread(imgPattern3);
 
     //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
     let rsize = new cv.Mat();
