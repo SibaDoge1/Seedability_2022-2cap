@@ -47,15 +47,26 @@ const blackList = []
 
 window.addEventListener('DOMContentLoaded', function(e) {
   document.onmouseover = scaleElement
+  chrome.storage.sync.get(['expension'], function(result) {
+    if(result != null){
+      expension = result.expension
+    }
+  });
   
 });
 
 
 function scaleElement(e){
   targets.forEach(element=>{
-    element.style = element.originStyle;
-    element.style.transition = "0.5s";
-    element.isZoomed = false
+    console.log(element.originStyle)
+    if(element.originStyle == ""){
+      element.removeAttribute("style")
+    }
+    else{
+      element.style = element.originStyle;
+      element.style.transition = "0.5s";
+      element.isZoomed = false
+    }
   })
   targets = []
   affectedDoms = []

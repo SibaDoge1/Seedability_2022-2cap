@@ -1,13 +1,13 @@
 chrome.runtime.onMessage.addListener(message => {
   if (message.imgData) {
     if(message.imgType == "symbol" && prevSymbol == "True"){
-      showImg(message.imgData, message.idx, symbols)
       console.log("symbol completed")
+      showImg(message.imgData, message.src, symbols)
       //URL.revokeObjectURL(message.imageData) 
     }
     else if(message.imgType == "edge" && prevEdge == "True"){
       console.log("edge completed")
-      showImg(message.imgData, message.idx, edges)
+      showImg(message.imgData, message.src, edges)
       //URL.revokeObjectURL(message.imageData) 
     }
   }
@@ -23,9 +23,9 @@ window.addEventListener('DOMContentLoaded', function(e) {
     if(prevSymbol == "True"){
       let elements = document.elementsFromPoint(e.clientX, e.clientY);
       let filt = Array.from(elements.filter(ele=>ele.src != null || ele.dataset.src != null))
-      if(filt[0] && !symbols.includes(filt[0])){
-        symbols.push(filt[0])
-        sendImg(filt[0], symbols.indexOf(filt[0]), "runSymbol")
+      if(filt[0] && !symbols.has(getSrc(filt[0]))){
+        symbols.set(getSrc(filt[0]), filt[0])
+        sendImg(filt[0], "runSymbol", prevColorBlind)
       }
     }
   })
@@ -44,6 +44,7 @@ function refreshAll(){
   });
 }
 
+
 function refreshEdge(edge, colorBlind) {
     console.log('edge is set to ' + edge);
 
@@ -52,10 +53,10 @@ function refreshEdge(edge, colorBlind) {
         findAndDoEdge(colorBlind)
       }
       else{
-        for(var ele  of edges){
+        for(var [idx, ele]  of edges){
           returnImg(ele)
-          edges = []
         }
+        edges.clear()
       }
     }
     else if (edge == "True" && colorBlind != prevColorBlind){
@@ -69,20 +70,20 @@ function refreshSymbol(symbol, colorBlind) {
 
   if(symbol != prevSymbol){
     if(symbol == "True"){
-      for(var [idx, ele]  of symbols.entries()){
-        sendImg(ele,idx, "runSymbol", colorBlind)
+      for(var [idx, ele]  of symbols){
+        sendImg(ele, "runSymbol", colorBlind)
       }
     }
     else{
       for(var ele  of symbols){
         returnImg(ele)
       }
-      symbols = []
+      symbols.clear()
     }
   }
   else if (symbol == "True" && colorBlind != prevColorBlind){
-    for(var [idx, ele]  of symbols.entries()){
-      sendImg(ele,idx, "runSymbol", colorBlind)
+    for(var [idx, ele]  of symbols){
+      sendImg(ele, "runSymbol", colorBlind)
     }
   }
   prevSymbol = symbol
@@ -92,13 +93,17 @@ function findAndDoEdge(blind){
   for(var ele  of edges){
     returnImg(ele)
   }
-  edges = []
+  edges = new Map()
   const elements = Array.from(document.querySelectorAll("img"))
-  edges = elements.filter(ele=>ele.width >= 50 && ele.height >= 50 || true)
+  elements.forEach((ele)=>{
+    if(ele.width >= 50 && ele.height >= 50 || true){
+      edges.set(getSrc(ele), ele)
+    }
+  })
   //console.log(edges)
 
   for(var [idx, ele]  of edges.entries()){
-    sendImg(ele,idx, "runEdge", blind)
+    sendImg(ele, "runEdge", blind)
   }
 }
 
@@ -106,35 +111,41 @@ function returnImg(ele){
     ele.src = ele.originSrc
 }
 
-function sendImg(imgEle,idx, cmd){
+function getSrc(ele){
+  //if(ele.originSrc) return ele.originSrc
+  return ele.src == "" ? ele.dataset.src:ele.src
+}
+
+function sendImg(imgEle, cmd, blind){
     if(curCnt < maxCnt){      
       //console.log('send')
-      let src = imgEle.src == "" ? imgEle.dataset.src:imgEle.src
+      let src = getSrc(imgEle)
       console.log(src)
       imgEle.originSrc = src
       chrome.runtime.sendMessage({
         cmd: cmd,
-        idx: idx,
-        src: src
+        src: src,
+        colorBlind: blind
       });
       curCnt++
     }
 }
 
-edges = []
-symbols = []
+edges = new Map()
+symbols = new Map()
 curCnt = 0;
 maxCnt = 9999;
 prevColorBlind = null
 prevEdge = "False"
 prevSymbol = "False"
 
-async function showImg(url, idx, arrays){
+async function showImg(url, src, arrays){
+  if(!arrays.has(src)) return
   const tmp = await fetch(url)
   const blob = await tmp.blob()
   //console.log(blob)
   const newUrl = URL.createObjectURL(blob)
-  arrays[idx].src = newUrl
+  arrays.get(src).src = newUrl
 }
 
 console.log("Hello. This message was sent from symbol.js")

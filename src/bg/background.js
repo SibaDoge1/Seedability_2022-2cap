@@ -13,6 +13,16 @@ window.addEventListener('DOMContentLoaded', function(e) {
   console.log(imgPattern)
 });
 
+function edge_detection(rsize){
+  let edge = new cv.Mat();
+  cv.Canny(rsize, edge, 50, 100, 3, false);
+
+  let edge_rgba = new cv.Mat();
+  cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
+  
+
+  return edge_rgba;
+}
 
 function add_pattern(x){
    //target image
@@ -199,7 +209,7 @@ cv.Canny(src, edge, 50, 100, 3, false);
   return dst
 };
 
-function run(src, idx,cmd){
+function run(src,cmd){
   let imgEle = new Image();
 
   imgEle.onload = async () => {
@@ -223,7 +233,6 @@ function run(src, idx,cmd){
         src:src,
         imgData:url,
         imgType:cmd,
-        idx:idx
       });
     });
   };
@@ -235,15 +244,15 @@ function run(src, idx,cmd){
 const cmd = {
   runLogic: (request, sender) => {
     console.log(request.src)
-    getImageData(request.src, request.idx)
+    getImageData(request.src)
   },
   runSymbol: (request, sender) => {
     console.log("symbol: " + request.src)
-    run(request.src, request.idx, "symbol")
+    run(request.src, "symbol")
   },
   runEdge: (request, sender) => {
     console.log("edge: " + request.src)
-    run(request.src, request.idx, "edge")
+    run(request.src, "edge")
   }
 };
 
@@ -257,7 +266,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 
-async function getImageData(src, idx){
+async function getImageData(src){
   let img = new Image();
 
   img.onload = async () => {
@@ -276,8 +285,7 @@ async function getImageData(src, idx){
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, {
         src:src,
-        imageData:url,
-        idx:idx
+        imageData:url
       });
     });
   };
