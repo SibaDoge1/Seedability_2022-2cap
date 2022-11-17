@@ -127,16 +127,12 @@ function add_pattern(x){
     y3.delete();
     rsize.delete();
     rsize2.delete();
-    rsize3.delete();
     low.delete();
     low2.delete();
-    low3.delete();
     high.delete();
     high2.delete();
-    high3.delete();
     mask_inv.delete();
     mask_inv2.delete();
-    mask_inv3.delete();
     mani.delete();
 
     return mani2;
