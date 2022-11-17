@@ -106,14 +106,14 @@ imgElement.onload = function () {
     //console.log(temp);
     //console.log(white_dst);
 
-    let edge_rgb = new cv.Mat();
+    let edge_rgba = new cv.Mat();
 
-    cv.cvtColor(edge, edge_rgb, cv.COLOR_GRAY2RGBA, 0);
-    console.log(edge_rgb);
+    cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
+    console.log(edge_rgba);
 
-    cv.add(src, edge_rgb, dst);
+    cv.add(src, edge_rgba, dst);
     cv.imshow('canvasOutput', src);
-    cv.imshow('canvasOutput2', edge_rgb);
+    cv.imshow('canvasOutput2', edge_rgba);
     cv.imshow('canvasOutput3', dst);
 
 
