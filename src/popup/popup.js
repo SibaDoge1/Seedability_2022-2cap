@@ -95,6 +95,13 @@ function analyzeImage(){
 document.addEventListener('DOMContentLoaded', function(){
   refreshButton();
 
+  // 적 녹 청 - Key: colorBlind, Value: protanopia / deuteranopia / tritanopia
+  // 필터 - Key: filter, Value: True / null
+  // 심볼 - Key: simbol, Value: True / null
+  // 엣지 - Key: edge, Value: True / null
+  // 키우기 - Key: expension, Value: True / null
+  // 키우기 사이즈 - Key: fontSize, Value: 1~100
+
   document.getElementById("analyze").onclick = analyzeImage;
   document.getElementById("protanopia").addEventListener('click', function() { setState('colorBlind', 'protanopia'); });
   document.getElementById("deuteranopia").addEventListener('click', function() { setState('colorBlind', 'deuteranopia'); });
@@ -104,6 +111,18 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById("simbol").addEventListener('click', function() { setState('simbol', 'True'); });
   document.getElementById("edge").addEventListener('click', function() { setState('edge', 'True'); });
   document.getElementById("expension").addEventListener('click', function() { setState('expension', 'True'); });
+
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("value");
+  output.innerHTML = slider.value;
+  
+  slider.addEventListener('input', function() {
+    output.innerHTML = this.value;
+
+    chrome.storage.sync.set({ fontSize: parseInt(this.value.innerHTML) }, function() {
+      console.log('fontSize state was stored: ' + parseInt(this.value.innerHTML));
+    });
+  });
 });
 console.log("Hello. This message was sent from popup.js")
 // document.getElementById("test").onclick = function () {
