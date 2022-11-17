@@ -7,6 +7,18 @@
         padding: 10px;
       }
 
+      .btns button {
+        background-color: #f8f9fd;
+        border: 1px solid black; 
+        color: black; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-align: center;
+        width: 300px;
+        height: 50px;
+      }
+
       .btn-group button {
         background-color: #f8f9fd;
         border: 1px solid black; 
@@ -16,6 +28,7 @@
         float: left; /* Float the buttons side by side */
         text-align: center;
         width: 100px;
+        height: 50px;
       }
 
       /* Clear floats (clearfix hack) */
@@ -45,6 +58,12 @@
           <button id="protanopia">Prota<br>nopia</button>
           <button id="deuteranopia">Deutera<br>nopia</button>
           <button id="tritanopia">Trita<br>nopia</button>
+        </div>
+        <div class="btns">
+          <button id="filter">Apply Filter</button>
+          <button id="simbol">Apply Simbol</button>
+          <button id="edge">Apply EdgeDetection</button>
+          <button id="expension">Apply Expension</button>
         </div>
         <div class="inputoutput">
             <img id="imageSrc" alt="No Image"/>
