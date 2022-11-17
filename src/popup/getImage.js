@@ -10,11 +10,16 @@ inputElement.addEventListener('change', (e) => {
 }, false);
 
 
-function add_pattern(x, y){
+function add_pattern(x){
     let dst = new cv.Mat();
-    //let bg = new cv.Mat();
-    //let dst2 = new cv.Mat();
-    // You can try more different parameters
+    let y = cv.imread(imgPattern);
+
+    //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
+    let rsize = new cv.Mat();
+    //변경할 사이즈(imgElement로부터 받아옴)
+    let dsize = new cv.Size(imgElement.width, imgElement.height);
+    cv.resize(y, rsize, dsize, 0, 0, cv.INTER_AREA);
+
     let low = new cv.Mat(x.rows, x.cols, x.type(), [0, 128, 0, 0]);
     let high = new cv.Mat(x.rows, x.cols, x.type(),  [100, 255, 100, 255]);
 
@@ -27,34 +32,24 @@ function add_pattern(x, y){
     cv.bitwise_not(mask, mask_inv);
 
     cv.imshow('canvasOutput', dst);
-    /*
-    for (let i = 0; i < mask.rows; i++) {
-        for (let j = 0; j < mask.cols; j++) {
-            if (mask.ucharPtr(i, j)[0] === 255) {
-                x.ucharPtr(i, j)[0] = dst.ucharPtr(i, j)[0]
-                x.ucharPtr(i, j)[1] = dst.ucharPtr(i, j)[1]
-                x.ucharPtr(i, j)[2] = dst.ucharPtr(i, j)[2]
-                x.ucharPtr(i, j)[3] = dst.ucharPtr(i, j)[3]
-            }
-        }
-    }
-    */
+
     for (let i = 0; i < mask_inv.rows; i++) {
         for (let j = 0; j < mask_inv.cols; j++) {
             if (mask_inv.ucharPtr(i, j)[0] === 255) {
-                y.ucharPtr(i, j)[0] = dst.ucharPtr(i, j)[0]
-                y.ucharPtr(i, j)[1] = dst.ucharPtr(i, j)[1]
-                y.ucharPtr(i, j)[2] = dst.ucharPtr(i, j)[2]
-                y.ucharPtr(i, j)[3] = dst.ucharPtr(i, j)[3]
+                rsize.ucharPtr(i, j)[0] = dst.ucharPtr(i, j)[0]
+                rsize.ucharPtr(i, j)[1] = dst.ucharPtr(i, j)[1]
+                rsize.ucharPtr(i, j)[2] = dst.ucharPtr(i, j)[2]
+                rsize.ucharPtr(i, j)[3] = dst.ucharPtr(i, j)[3]
             }
         }
     }
 
     let mani = new cv.Mat();
+    cv.imshow('canvasOutput2', rsize);
 
-    cv.bitwise_xor(x, y, mani);
+    cv.bitwise_xor(x, rsize, mani);
 
-    cv.imshow('canvasOutput2', y);
+    //cv.imshow('canvasOutput2', y);
 
     cv.imshow('canvasOutput3', mani);
 
@@ -68,32 +63,19 @@ function add_pattern(x, y){
 imgElement.onload = function () {
     let src = cv.imread(imgElement);
 
-    //패턴 이미지
-    let src3 = cv.imread(imgPattern);
-
-    let dstx = new cv.Mat();
-    let dsty = new cv.Mat();
-
     let edge = new cv.Mat();
     let dst = new cv.Mat();
-    let dst2 = new cv.Mat();
-
-    //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
-    let rsize = new cv.Mat();
-    //변경할 사이즈(imgElement로부터 받아옴)
-    let dsize = new cv.Size(imgElement.width, imgElement.height);
-    cv.resize(src3, rsize, dsize, 0, 0, cv.INTER_AREA);
 
     let temp =src.clone();
     
-    //add_pattern(src, rsize);
+    //add_pattern(src);
     //console.log(this.height);
     
     cv.cvtColor(src, temp, cv.COLOR_RGB2GRAY, 0);
     //cv.Sobel(src, dstx, cv.CV_8U, 1, 0, 3, 1, 0, cv.BORDER_DEFAULT);
     //cv.Sobel(src, dsty, cv.CV_8U, 0, 1, 3, 1, 0, cv.BORDER_DEFAULT);
 	
-	cv.Canny(temp, edge, 50, 100, 3, false);
+	cv.Canny(src, edge, 50, 100, 3, false);
 
     //let white_low = new cv.Mat(edge.rows, edge.cols, edge.type(), [0, 0, 0, 0]);
     //let white_high = new cv.Mat(edge.rows, edge.cols, edge.type(),  [0, 0, 255, 255]);
@@ -109,7 +91,7 @@ imgElement.onload = function () {
     let edge_rgba = new cv.Mat();
 
     cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
-    console.log(edge_rgba);
+   // console.log(edge_rgba);
 
     cv.add(src, edge_rgba, dst);
     cv.imshow('canvasOutput', src);
