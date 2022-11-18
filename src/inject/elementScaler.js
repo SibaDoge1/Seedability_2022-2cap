@@ -1,6 +1,18 @@
 const maxFontSize = 150;
 const originFontSize = 100;
 
+chrome.runtime.onMessage.addListener(message => {
+  if(message.type =="expension"){
+    chrome.storage.sync.get(['expension'], function(result) {
+      if(result != null){
+        expension = result.expension
+      }
+    });
+  }
+});
+
+let expension = "False"
+
 // document.onmousemove = function (e) {
 // 	let tmp = document.elementFromPoint(e.clientX, e.clientY);
 // 	if (x != null && x != tmp) {
@@ -32,15 +44,35 @@ const blackList = []
 //   targets = []
 //   affectedDoms = []
 // }
-document.onmouseover = function (e) {
+
+window.addEventListener('DOMContentLoaded', function(e) {
+  document.onmouseover = scaleElement
+  chrome.storage.sync.get(['expension'], function(result) {
+    if(result != null){
+      expension = result.expension
+    }
+  });
   
-	targets.forEach(element=>{
-    element.style = element.originStyle;
-    element.style.transition = "0.5s";
-    element.isZoomed = false
-	})
+});
+
+
+function scaleElement(e){
+  targets.forEach(element=>{
+    console.log(element.originStyle)
+    if(element.originStyle == ""){
+      element.removeAttribute("style")
+    }
+    else{
+      element.style = element.originStyle;
+      element.style.transition = "0.5s";
+      element.isZoomed = false
+    }
+  })
   targets = []
   affectedDoms = []
+  if(expension != "True") return
+
+
   let element = e.target
 
   if(isVisible(element)){
@@ -68,14 +100,15 @@ document.onmouseover = function (e) {
       if(isDuplicate(element)) return
         //console.log(element)
         let originStyle = element.style
-        element.style.transform = "scale(1.3, 1.3)";
+        element.style.transform = "scale(1.4, 1.4)";
         element.originStyle = originStyle;
         element.style.transition = "0.5s";
         element.isZoomed = true
         targets.push(element)
     }
   }
-};
+}
+
 
 function checkText(ele){  
   if (ele.hasChildNodes()) {
@@ -88,6 +121,7 @@ function checkText(ele){
   return false
 }
 
+
 const getParents = el => {
   for (var parents = []; el; el = el.parentNode) {
     parents.push(el);
@@ -95,6 +129,7 @@ const getParents = el => {
 
   return parents;
 };
+
 
 function isDuplicate(el){
   if(el.isZoomed === true){
@@ -109,9 +144,11 @@ function isDuplicate(el){
   return false
 }
 
+
 function isVisible(e) {
   return !!( e.offsetWidth || e.offsetHeight || e.getClientRects().length );
 }
+
 
 function isText(e){
   let child = e.firstChild,
@@ -125,6 +162,7 @@ function isText(e){
   }
   return false
 }
+
 
 function convertCSSLengthUnit(fromUnitValue, toUnit){
   let value = fromUnitValue.match(/[0-9]+\.*[0-9]*/g)[0];
@@ -153,8 +191,9 @@ function convertCSSLengthUnit(fromUnitValue, toUnit){
   return toUnitValuePixel + 'px';
 }
 
+
 function changeFontSize(originFontSize){
   let converted = convertCSSLengthUnit(originFontSize, 'px')
-  var fontSize = parseInt(converted) + 5 + "px";
+  var fontSize = parseInt(converted) + 10 + "px";
   return fontSize
 }

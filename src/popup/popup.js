@@ -2,7 +2,7 @@ function setState(key, value) {
   let recentState;
 
   chrome.storage.sync.get([key], function(result) {
-    console.log(key + ' state was stored: ' + result.colorBlind);
+    console.log(key + ' state was loaded: ' + result[key]);
     console.log(result);
 
     if (result != null) {
@@ -19,12 +19,12 @@ function setState(key, value) {
       }
 
       chrome.storage.sync.set(state, function() {
-        console.log(key + ' state was stored: ' + state.colorBlind);
+        console.log(key + ' state was stored: ' + state[key]);
       });
 
       chrome.tabs.query({}, tabs => {
         tabs.forEach(tab => {
-          chrome.tabs.sendMessage(tab.id, { type: "refreshFilter" });
+          chrome.tabs.sendMessage(tab.id, { type: key });
         });
       });
 
@@ -34,16 +34,16 @@ function setState(key, value) {
 }
 
 function refreshButton() {
-  document.getElementById('protanopia').style.background='#ffffff';
-  document.getElementById('deuteranopia').style.background='#ffffff';
-  document.getElementById('tritanopia').style.background='#ffffff';
+  document.getElementById('fixProtanopia').style.background='#ffffff';
+  document.getElementById('fixDeuteranopia').style.background='#ffffff';
+  document.getElementById('fixTritanopia').style.background='#ffffff';
 
   document.getElementById('filter').style.background='#ffffff';
-  document.getElementById('simbol').style.background='#ffffff';
+  document.getElementById('symbol').style.background='#ffffff';
   document.getElementById('edge').style.background='#ffffff';
   document.getElementById('expension').style.background='#ffffff';
 
-  chrome.storage.sync.get(['colorBlind', 'filter', 'simbol', 'edge', 'expension'], function(result) {
+  chrome.storage.sync.get(['colorBlind', 'filter', 'symbol', 'edge', 'expension'], function(result) {
     if (result != null) {
       if (result.colorBlind != null && result.colorBlind != 'null') {
         document.getElementById(result.colorBlind).style.background='#dedee2';
@@ -51,8 +51,8 @@ function refreshButton() {
       if (result.filter != null && result.filter != 'null') {
         document.getElementById('filter').style.background='#dedee2';
       }
-      if (result.simbol != null && result.simbol != 'null') {
-        document.getElementById('simbol').style.background='#dedee2';
+      if (result.symbol != null && result.symbol != 'null') {
+        document.getElementById('symbol').style.background='#dedee2';
       }
       if (result.edge != null && result.edge != 'null') {
         document.getElementById('edge').style.background='#dedee2';
@@ -103,12 +103,12 @@ document.addEventListener('DOMContentLoaded', function(){
   // 키우기 사이즈 - Key: fontSize, Value: 1~100
 
   document.getElementById("analyze").onclick = analyzeImage;
-  document.getElementById("protanopia").addEventListener('click', function() { setState('colorBlind', 'protanopia'); });
-  document.getElementById("deuteranopia").addEventListener('click', function() { setState('colorBlind', 'deuteranopia'); });
-  document.getElementById("tritanopia").addEventListener('click', function() { setState('colorBlind', 'tritanopia'); });
+  document.getElementById("fixProtanopia").addEventListener('click', function() { setState('colorBlind', 'fixProtanopia'); });
+  document.getElementById("fixDeuteranopia").addEventListener('click', function() { setState('colorBlind', 'fixDeuteranopia'); });
+  document.getElementById("fixTritanopia").addEventListener('click', function() { setState('colorBlind', 'fixTritanopia'); });
 
   document.getElementById("filter").addEventListener('click', function() { setState('filter', 'True'); });
-  document.getElementById("simbol").addEventListener('click', function() { setState('simbol', 'True'); });
+  document.getElementById("symbol").addEventListener('click', function() { setState('symbol', 'True'); });
   document.getElementById("edge").addEventListener('click', function() { setState('edge', 'True'); });
   document.getElementById("expension").addEventListener('click', function() { setState('expension', 'True'); });
 

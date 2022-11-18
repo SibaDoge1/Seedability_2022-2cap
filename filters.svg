@@ -12,6 +12,15 @@
                 0,     0.242, 0.758, 0, 0
                 0,     0,     0,     1, 0"/>
     </filter>
+    <filter id="fixProtanopia">
+      <feColorMatrix
+        in="SourceGraphic"
+        type="matrix"
+        values="0.25,     0,     0.75,     0, 0
+                0.5,     0.5,     0,     0, 0
+                1,     0,     0,     0, 0
+                0,     0,     0,     1, 0"/>
+    </filter>
     <filter id="protanomaly">
       <feColorMatrix
         in="SourceGraphic"
@@ -22,6 +31,15 @@
                 0,     0,     0,     1, 0"/>
     </filter>
     <filter id="deuteranopia">
+      <feColorMatrix
+        in="SourceGraphic"
+        type="matrix"
+        values="0.625, 0.375, 0,   0, 0
+                0.7,   0.3,   0,   0, 0
+                0,     0.3,   0.7, 0, 0
+                0,     0,     0,   1, 0"/>
+    </filter>
+    <filter id="fixDeuteranopia">
       <feColorMatrix
         in="SourceGraphic"
         type="matrix"
