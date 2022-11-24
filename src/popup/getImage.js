@@ -13,6 +13,7 @@ inputElement.addEventListener('change', (e) => {
     imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
+
 function edge_detection(r){
     let edge = new cv.Mat();
     cv.Canny(r, edge, 50, 100, 3, false);
@@ -102,23 +103,9 @@ function add_pattern(x){
     let mani = new cv.Mat();
     //addWeighted
     let mani2 = new cv.Mat();
-    /*
-    let edge = new cv.Mat();
-    cv.Canny(rsize, edge, 50, 100, 3, false);
 
-    let edge_rgba = new cv.Mat();
-    cv.cvtColor(edge, edge_rgba, cv.COLOR_GRAY2RGBA, 0);
-    
-    let edge_dst = new cv.Mat();
-    
-    cv.add(rsize, edge_rgba, edge_dst);
-    //cv.imshow('canvasOutput2', rsize);*/
-
+    //edge만 추가해줌
     let edge_dst = edge_detection(dst);
-
-    //image manipulation
-    //cv.bitwise_or(src, rsize, mani);
-    //cv.bitwise_or(mani, rsize2, mani);
 
     //addWeighted
     cv.addWeighted(src, 1.0, rsize,0.2, 0,  mani2);
@@ -126,10 +113,11 @@ function add_pattern(x){
 
     cv.add(edge_dst, mani2, mani);
     
+    //edge표시
     cv.imshow('canvasOutput', edge_dst);
-
+    //edge + symbol이미지
     cv.imshow('canvasOutput2', mani);
-
+    //symbol이미지
     cv.imshow('canvasOutput3', mani2);
 
     //delete all
