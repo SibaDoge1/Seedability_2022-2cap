@@ -85,10 +85,12 @@ function edge_detection(x){
     let low2 = new cv.Mat(src.rows, src.cols, src.type(), [0, 100, 0, 0]);
     let high2 = new cv.Mat(src.rows, src.cols, src.type(),  [152, 255, 170, 255]);
 
+    //cv.inRange(src, l, h, dst);
+
     dst = get_mask(x, low, high, imgPattern)[0];
     rsize = get_mask(x, low, high, imgPattern)[1];
-    dst2 = get_mask(x, low2, high2, imgPattern)[0];
-    rsize2 = get_mask(x, low2, high2, imgPattern)[1];
+    dst2 = get_mask(x, low2, high2, imgPattern2)[0];
+    rsize2 = get_mask(x, low2, high2, imgPattern2)[1];
     //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
 
@@ -104,30 +106,6 @@ function edge_detection(x){
     //bitwise_not
     cv.bitwise_not(dst, mask_inv);
     cv.bitwise_not(dst2, mask_inv2);
-
-
-
-    //image processing
-    for (let i = 0; i < mask_inv.rows; i++) {
-        for (let j = 0; j < mask_inv.cols; j++) {
-            if (mask_inv.ucharPtr(i, j)[0] === 255) {
-                rsize.ucharPtr(i, j)[0] = dst.ucharPtr(i, j)[0]
-                rsize.ucharPtr(i, j)[1] = dst.ucharPtr(i, j)[1]
-                rsize.ucharPtr(i, j)[2] = dst.ucharPtr(i, j)[2]
-                rsize.ucharPtr(i, j)[3] = dst.ucharPtr(i, j)[3]
-            }
-        }
-    }
-    for (let i = 0; i < mask_inv2.rows; i++) {
-        for (let j = 0; j < mask_inv2.cols; j++) {
-            if (mask_inv2.ucharPtr(i, j)[0] === 255) {
-                rsize2.ucharPtr(i, j)[0] = dst2.ucharPtr(i, j)[0]
-                rsize2.ucharPtr(i, j)[1] = dst2.ucharPtr(i, j)[1]
-                rsize2.ucharPtr(i, j)[2] = dst2.ucharPtr(i, j)[2]
-                rsize2.ucharPtr(i, j)[3] = dst2.ucharPtr(i, j)[3]
-            }
-        }
-    }
 
     let edge = new cv.Mat();
     cv.Canny(dst, edge, 50, 100, 3, false);
@@ -198,8 +176,8 @@ function add_pattern(x){
 
     dst = get_mask(x, low, high, imgPattern)[0];
     rsize = get_mask(x, low, high, imgPattern)[1];
-    dst2 = get_mask(x, low2, high2, imgPattern)[0];
-    rsize2 = get_mask(x, low2, high2, imgPattern)[1];
+    dst2 = get_mask(x, low2, high2, imgPattern2)[0];
+    rsize2 = get_mask(x, low2, high2, imgPattern2)[1];
     //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
 
@@ -307,8 +285,8 @@ function both(x){
 
     dst = get_mask(x, low, high, imgPattern)[0];
     rsize = get_mask(x, low, high, imgPattern)[1];
-    dst2 = get_mask(x, low2, high2, imgPattern)[0];
-    rsize2 = get_mask(x, low2, high2, imgPattern)[1];
+    dst2 = get_mask(x, low2, high2, imgPattern2)[0];
+    rsize2 = get_mask(x, low2, high2, imgPattern2)[1];
     //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
 
