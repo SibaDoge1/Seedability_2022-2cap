@@ -10,6 +10,11 @@ chrome.runtime.onMessage.addListener(message => {
       showImg(message.imgData, message.src, edges)
       //URL.revokeObjectURL(message.imageData) 
     }
+    else if(message.imgType == "both" && prevEdge == "True" && prevSymbol == "True"){
+      console.log("both completed")
+      showImg(message.imgData, message.src, edges)
+      //URL.revokeObjectURL(message.imageData) 
+    }
   }
   else if(message.type){
       refreshAll()
@@ -25,7 +30,12 @@ window.addEventListener('DOMContentLoaded', function(e) {
       let filt = Array.from(elements.filter(ele=>ele.src != null || ele.dataset.src != null))
       if(filt[0] && !symbols.has(getSrc(filt[0]))){
         symbols.set(getSrc(filt[0]), filt[0])
-        sendImg(filt[0], "runSymbol", prevColorBlind)
+        if(edges.has(getSrc(filt[0]))){
+          sendImg(filt[0], "runBoth", prevColorBlind)
+        }
+        else{
+          sendImg(filt[0], "runSymbol", prevColorBlind)
+        }
       }
     }
   })
@@ -36,16 +46,34 @@ window.addEventListener('DOMContentLoaded', function(e) {
 function refreshAll(){
   chrome.storage.sync.get(['colorBlind', 'symbol', 'edge'], function(result) {
     if (result != null) {
-      console.log('colorBlind is set to ' + result.colorBlind);
-      refreshEdge(result.edge, result.colorBlind)
-      refreshSymbol(result.symbol, result.colorBlind)
+      if(result.edge == "True" && result.symbol == "True"){
+          refreshBoth(result.edge, result.symbol, result.colorBlind)
+          prevEdge = result.edge
+          prevSymbol = result.symbol
+      }
+      else{
+        refreshEdge(result.edge, result.colorBlind, result.symbol)
+        refreshSymbol(result.symbol, result.colorBlind, result.edge)
+      }
       prevColorBlind = result.colorBlind
     }
   });
 }
 
+function refreshBoth(edge, symbol, colorBlind) {
+  if(edge == prevEdge && symbol == prevSymbol && colorBlind == prevColorBlind)
+    return
+  if(prevEdge != "True"){
+    findAndDoEdge(colorBlind)
+  }
+  else{
+    for(var [idx, ele]  of symbols){
+      sendImg(ele, "runBoth", prevColorBlind)
+    }
+  }
+}
 
-function refreshEdge(edge, colorBlind) {
+function refreshEdge(edge, colorBlind, symbol) {
     console.log('edge is set to ' + edge);
 
     if(edge != prevEdge){
@@ -54,7 +82,10 @@ function refreshEdge(edge, colorBlind) {
       }
       else{
         for(var [idx, ele]  of edges){
-          returnImg(ele)
+          if(symbol == "True" && symbols.has(getSrc(ele)))
+            sendImg(ele, "runSymbol", colorBlind)
+          else
+            returnImg(ele)
         }
         edges.clear()
       }
@@ -65,18 +96,19 @@ function refreshEdge(edge, colorBlind) {
     prevEdge = edge
 }
 
-function refreshSymbol(symbol, colorBlind) {
+function refreshSymbol(symbol, colorBlind, edge) {
   console.log('symbol is set to ' + symbol);
 
   if(symbol != prevSymbol){
     if(symbol == "True"){
-      for(var [idx, ele]  of symbols){
-        sendImg(ele, "runSymbol", colorBlind)
-      }
+
     }
     else{
-      for(var ele  of symbols){
-        returnImg(ele)
+      for(var [idx, ele]  of symbols){
+        if(edge == "True" && edges.has(getSrc(ele)))
+          sendImg(ele, "runEdge", colorBlind)
+        else
+          returnImg(ele)
       }
       symbols.clear()
     }
@@ -103,7 +135,14 @@ function findAndDoEdge(blind){
   //console.log(edges)
 
   for(var [idx, ele]  of edges.entries()){
-    sendImg(ele, "runEdge", blind)
+    if(symbols.has(getSrc(ele))){
+      console.log("both found")
+      sendImg(ele, "runBoth", blind)
+    }
+    else{
+      
+      sendImg(ele, "runEdge", blind)
+    }
   }
 }
 
@@ -112,7 +151,7 @@ function returnImg(ele){
 }
 
 function getSrc(ele){
-  //if(ele.originSrc) return ele.originSrc
+  if(ele.originSrc) return ele.originSrc
   return ele.src == "" ? ele.dataset.src:ele.src
 }
 
