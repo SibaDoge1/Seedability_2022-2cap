@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="./popup.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <style>
       #panel {
         padding: 10px;
       }
 
       .btns button {
-        background-color: #f8f9fd;
+        background-color: #ffffff;
         border: 1px solid black; 
+        margin: 5px;
         color: black; /* White text */
         padding: 10px 24px; /* Some padding */
         cursor: pointer; /* Pointer/hand icon */
@@ -18,16 +22,18 @@
         width: 300px;
         height: 50px;
       }
+      
 
       .btn-group button {
-        background-color: #f8f9fd;
+        background-color: #ffffff;
         border: 1px solid black; 
+        margin: 3px;
         color: black; /* White text */
         padding: 10px 24px; /* Some padding */
         cursor: pointer; /* Pointer/hand icon */
         float: left; /* Float the buttons side by side */
         text-align: center;
-        width: 100px;
+        width: 97px;
         height: 50px;
       }
 
@@ -38,13 +44,14 @@
         display: table;
       }
 
-      .btn-group button:not(:last-child) {
-        border-right: none; /* Prevent double borders */
-      }
 
       /* Add a background color on hover */
-      .btn-group button:hover {
-        background-color: #dedee2;
+      button:hover {
+        background-color: #ebe989bb;
+      }
+
+      button.clicked {
+        background-color: #c5c5c5;
       }
     </style>
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'"> -->
@@ -55,67 +62,16 @@
     <div id="panel">
       <div>
         <div class="btn-group">
-          <button id="fixProtanopia">Prota<br>nopia</button>
-          <button id="fixDeuteranopia">Deutera<br>nopia</button>
-          <button id="fixTritanopia">Trita<br>nopia</button>
+          <button id="fixProtanopia">적색맹</button>
+          <button id="fixDeuteranopia">녹색맹</button>
+          <button id="fixTritanopia">청색맹</button>
         </div>
         <div class="btns">
-          <button id="filter">Apply Filter</button>
-          <button id="symbol">Apply Symbol</button>
-          <button id="edge">Apply EdgeDetection</button>
-          <button id="expension">Apply Expension</button>
-        </div>
-        <div class="inputoutput">
-            <img id="imageSrc" alt="No Image"/>
-            <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
-        </div>
-        <div class="inputoutput">
-            <canvas id="canvasOutput"></canvas>
-            <div class="caption">canvasOutput</div>
-        </div>
-        <div class="inputoutput">
-          <img id="imageSrc2" alt="No Image"/>
-          <div class="caption">imageSrc2 <input type="file" id="fileInput2" name="file" /></div>
-        </div>
-        <div class="inputoutput">
-          <canvas id="canvasOutput2"></canvas>
-          <div class="caption">canvasOutput2</div>
-        </div>
-        <div class="inputoutput">
-          <canvas id="canvasOutput3"></canvas>
-          <div class="caption">canvasOutput3</div>
-        </div>
-      </div>
-      <div class="inputoutput">
-          <canvas id="canvasOutput"></canvas>
-          <div class="caption">canvasOutput</div>
-      </div>
-      <div class="inputoutput">
-        <canvas id="canvasOutput2"></canvas>
-        <div class="caption">canvasOutput2</div>
-      </div>
-      <div class="inputoutput">
-        <canvas id="canvasOutput3"></canvas>
-        <div class="caption">canvasOutput3</div>
-      </div>
-      <div class="inputoutput">
-        <img id="imgPattern" src = "./check.jpg"></canvas>
-        <div class="caption">imgPattern</div>
-      </div>
-      <div class="inputoutput">
-        <img id="imgPattern2" src = "./stripe.jpg"></canvas>
-        <div class="caption">imgPattern2</div>
-      </div>
-      <div class="inputoutput">
-        <img id="imgPattern3" src = "./dot.jpg"></canvas>
-        <div class="caption">imgPattern3</div>
-      </div>
+          <button id="filter">색맹필터</button>
+          <button id="symbol">색상 별 심볼</button>
+          <button id="edge">경계선 표시</button>
+          <button id="expension">이미지, 글자 확대</button>
     </div>
-    <script async src ="./opencv.js" ></script>
-      <script src="./getImage.js"></script>
-        <button id="test" class="btn">Test</button>
-        <textarea id="url" placeholder="Enter Image URL"></textarea>
-        <button id="analyze" class="btn">Analyze!</button>
       <script src="./popup.js"></script>
   </body>
 </html>

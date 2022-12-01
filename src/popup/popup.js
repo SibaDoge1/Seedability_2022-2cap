@@ -34,31 +34,31 @@ function setState(key, value) {
 }
 
 function refreshButton() {
-  document.getElementById('fixProtanopia').style.background='#ffffff';
-  document.getElementById('fixDeuteranopia').style.background='#ffffff';
-  document.getElementById('fixTritanopia').style.background='#ffffff';
+  document.getElementById('fixProtanopia').className = ""
+  document.getElementById('fixDeuteranopia').className = ""
+  document.getElementById('fixTritanopia').className = ""
 
-  document.getElementById('filter').style.background='#ffffff';
-  document.getElementById('symbol').style.background='#ffffff';
-  document.getElementById('edge').style.background='#ffffff';
-  document.getElementById('expension').style.background='#ffffff';
+  document.getElementById('filter').className = ""
+  document.getElementById('symbol').className = ""
+  document.getElementById('edge').className = ""
+  document.getElementById('expension').className = ""
 
   chrome.storage.sync.get(['colorBlind', 'filter', 'symbol', 'edge', 'expension'], function(result) {
     if (result != null) {
       if (result.colorBlind != null && result.colorBlind != 'null') {
-        document.getElementById(result.colorBlind).style.background='#dedee2';
+        document.getElementById(result.colorBlind).className = "clicked"
       }
       if (result.filter != null && result.filter != 'null') {
-        document.getElementById('filter').style.background='#dedee2';
+        document.getElementById('filter').className = "clicked"
       }
       if (result.symbol != null && result.symbol != 'null') {
-        document.getElementById('symbol').style.background='#dedee2';
+        document.getElementById('symbol').className = "clicked"
       }
       if (result.edge != null && result.edge != 'null') {
-        document.getElementById('edge').style.background='#dedee2';
+        document.getElementById('edge').className = "clicked"
       }
       if (result.expension != null && result.expension != 'null') {
-        document.getElementById('expension').style.background='#dedee2';
+        document.getElementById('expension').className = "clicked"
       }
     }
   });
@@ -95,7 +95,7 @@ function analyzeImage(){
 document.addEventListener('DOMContentLoaded', function(){
   refreshButton();
 
-  document.getElementById("analyze").onclick = analyzeImage;
+  //document.getElementById("analyze").onclick = analyzeImage;
   document.getElementById("fixProtanopia").addEventListener('click', function() { setState('colorBlind', 'fixProtanopia'); });
   document.getElementById("fixDeuteranopia").addEventListener('click', function() { setState('colorBlind', 'fixDeuteranopia'); });
   document.getElementById("fixTritanopia").addEventListener('click', function() { setState('colorBlind', 'fixTritanopia'); });
