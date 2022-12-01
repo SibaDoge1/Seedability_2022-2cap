@@ -220,7 +220,10 @@ async function showImg(url, src, arrays){
   const blob = await tmp.blob()
   //console.log(blob)
   const newUrl = URL.createObjectURL(blob)
-  arrays.get(src).src = newUrl
+  let ele = arrays.get(src)
+  ele.src = newUrl
+  if(ele.srcset)
+    ele.srcset = newUrl
 }
 
 console.log("Hello. This message was sent from symbol.js")
