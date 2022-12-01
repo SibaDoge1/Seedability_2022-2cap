@@ -66,6 +66,13 @@ function edge_detection(x){
     let y2 = cv.imread(imgPattern2);
     let y3 = cv.imread(imgPattern3);
 
+    //let rcsize = new cv.Mat();
+    //let csize = new cv.Size(1000, 1000);
+
+    //cv.resize(src, rcsize, csize, 0, 0, cv.INTER_AREA);
+    //cv.imshow('canvasOutput', rcsize);
+
+
     //변경할 사이즈(imgElement로부터 받아옴)
     //let dsize = new cv.Size(x.width, x.height);
     
@@ -369,7 +376,7 @@ imgElement.onload = function () {
     let dst = new cv.Mat();
 
     let temp =src.clone();
-
+    //edge_detection(imgElement);
     //edge표시
     cv.imshow('canvasOutput', edge_detection(imgElement));
     cv.imshow('canvasOutput2', add_pattern(imgElement));
