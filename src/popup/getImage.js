@@ -66,10 +66,6 @@ function edge_detection(x){
     let y2 = cv.imread(imgPattern2);
     let y3 = cv.imread(imgPattern3);
 
-    //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
-    let rsize = new cv.Mat();
-    let rsize2 = new cv.Mat();
-
     //변경할 사이즈(imgElement로부터 받아옴)
     //let dsize = new cv.Size(x.width, x.height);
     
@@ -87,10 +83,8 @@ function edge_detection(x){
 
     //cv.inRange(src, l, h, dst);
 
-    dst = get_mask(x, low, high, imgPattern)[0];
-    rsize = get_mask(x, low, high, imgPattern)[1];
-    dst2 = get_mask(x, low2, high2, imgPattern2)[0];
-    rsize2 = get_mask(x, low2, high2, imgPattern2)[1];
+    cv.inRange(src, low, high, dst);
+    cv.inRange(src, low2, high2, dst2);
     //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
 
@@ -128,8 +122,6 @@ function edge_detection(x){
     y.delete();
     y2.delete();
     y3.delete();
-    rsize.delete();
-    rsize2.delete();
     low.delete();
     low2.delete();
     high.delete();
