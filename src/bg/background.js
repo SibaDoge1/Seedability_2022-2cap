@@ -50,9 +50,12 @@ function edge_detection(r){
   return edge_rgba;
 }*/
 
-function edge_detection(x){
-  //target image
-  let src = cv.imread(x);
+function edge_detection(x, isMat){
+  let src
+  if(isMat)
+    src = x;
+  else
+    src = cv.imread(x);
   
   //mask
   let dst = new cv.Mat();
@@ -358,7 +361,7 @@ function both(x){
 
 }
 
-function run(src,cmd){
+function run(src,cmd, originSrc){
   let imgEle = new Image();
 
   imgEle.onload = async () => {
@@ -371,7 +374,8 @@ function run(src,cmd){
       dst = add_pattern(imgEle)
     }
     else if(cmd == "both"){
-      dst = both(imgEle)
+      dst = add_pattern(imgEle)
+      dst = edge_detection(dst, true)
     }
 
     let canvas = document.createElement("canvas");
@@ -384,6 +388,7 @@ function run(src,cmd){
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, {
         src:src,
+        originSrc:originSrc,
         imgData:url,
         imgType:cmd,
       });
@@ -401,15 +406,15 @@ const cmd = {
   },
   runSymbol: (request, sender) => {
     console.log("symbol: " + request.src)
-    run(request.src, "symbol")
+    run(request.src, "symbol", request.originSrc)
   },
   runEdge: (request, sender) => {
     console.log("edge: " + request.src)
-    run(request.src, "edge")
+    run(request.src, "edge", request.originSrc)
   },
   runBoth: (request, sender) => {
     console.log("both: " + request.src)
-    run(request.src, "both")
+    run(request.src, "both", request.originSrc)
   }
 };
 

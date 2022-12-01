@@ -1,18 +1,18 @@
 chrome.runtime.onMessage.addListener(message => {
   if (message.imgData) {
     if(message.imgType == "symbol" && prevSymbol == "True"){
-      console.log("symbol completed")
-      showImg(message.imgData, message.src, symbols)
+      console.log("symbol completed" + message.originSrc)
+      showImg(message.imgData, message.originSrc, symbols)
       //URL.revokeObjectURL(message.imageData) 
     }
     else if(message.imgType == "edge" && prevEdge == "True"){
-      console.log("edge completed")
-      showImg(message.imgData, message.src, edges)
+      console.log("edge completed" + message.originSrc)
+      showImg(message.imgData, message.originSrc, edges)
       //URL.revokeObjectURL(message.imageData) 
     }
     else if(message.imgType == "both" && prevEdge == "True" && prevSymbol == "True"){
-      console.log("both completed")
-      showImg(message.imgData, message.src, edges)
+      console.log("both completed" + message.originSrc)
+      showImg(message.imgData, message.originSrc, edges)
       //URL.revokeObjectURL(message.imageData) 
     }
   }
@@ -25,26 +25,32 @@ chrome.runtime.onMessage.addListener(message => {
 
 window.addEventListener('DOMContentLoaded', function(e) {
   document.addEventListener("mouseover", function(e){
-    if(prevSymbol == "True"){
-      let elements = document.elementsFromPoint(e.clientX, e.clientY);
-      let filt = Array.from(elements.filter(ele=>ele.src != null || ele.dataset.src != null))
-      if(filt[0] && !symbols.has(getSrc(filt[0]))){
-        symbols.set(getSrc(filt[0]), filt[0])
-        if(edges.has(getSrc(filt[0]))){
-          sendImg(filt[0], "runBoth", prevColorBlind)
+    let elements = document.elementsFromPoint(e.clientX, e.clientY);
+    let filt = Array.from(elements.filter(ele=>ele.src != null || ele.dataset.src != null))
+
+    if(prevSymbol == "True" && prevEdge == "True"){
+      if(filt[0] && (!symbols.has(getOriginSrc(filt[0])) && !edges.has(getOriginSrc(filt[0])))){
+        symbols.set(getOriginSrc(filt[0]), filt[0])
+        edges.set(getOriginSrc(filt[0]), filt[0])
+        sendImg(filt[0], "runBoth", prevColorBlind)
+      }
+    }
+    else if(prevSymbol == "True"){
+      if(filt[0] && !symbols.has(getOriginSrc(filt[0]))){
+        symbols.set(getOriginSrc(filt[0]), filt[0])
+        if(edges.has(getOriginSrc(filt[0]))){
+          sendImg(filt[0], "runSymbol", prevColorBlind, true)
         }
         else{
           sendImg(filt[0], "runSymbol", prevColorBlind)
         }
       }
     }
-    if(prevEdge == "True"){
-      let elements = document.elementsFromPoint(e.clientX, e.clientY);
-      let filt = Array.from(elements.filter(ele=>ele.src != null || ele.dataset.src != null))
-      if(filt[0] && !symbols.has(getSrc(filt[0]))){
-        edges.set(getSrc(filt[0]), filt[0])
-        if(symbols.has(getSrc(filt[0]))){
-          sendImg(filt[0], "runBoth", prevColorBlind)
+    else if(prevEdge == "True"){
+      if(filt[0] && !edges.has(getOriginSrc(filt[0]))){
+        edges.set(getOriginSrc(filt[0]), filt[0])
+        if(symbols.has(getOriginSrc(filt[0]))){
+          sendImg(filt[0], "runEdge", prevColorBlind,true)
         }
         else{
           sendImg(filt[0], "runEdge", prevColorBlind)
@@ -65,8 +71,8 @@ function refreshAll(){
           prevSymbol = result.symbol
       }
       else{
-        refreshEdge(result.edge, result.colorBlind, result.symbol)
-        refreshSymbol(result.symbol, result.colorBlind, result.edge)
+          refreshEdge(result.edge, result.colorBlind, result.symbol)
+          refreshSymbol(result.symbol, result.colorBlind, result.edge)
       }
       prevColorBlind = result.colorBlind
     }
@@ -78,12 +84,14 @@ function refreshBoth(edge, symbol, colorBlind) {
     return
   if(prevEdge != "True"){
     for(var [idx, ele]  of symbols){
-      sendImg(ele, "runBoth", prevColorBlind)
+      edges.set(getOriginSrc(ele), ele)
+      sendImg(ele, "runEdge", prevColorBlind,true)
     }
   }
   else{
     for(var [idx, ele]  of edges){
-      sendImg(ele, "runBoth", prevColorBlind)
+      symbols.set(getOriginSrc(ele), ele)
+      sendImg(ele, "runSymbol", prevColorBlind,true)
     }
   }
 }
@@ -96,8 +104,10 @@ function refreshEdge(edge, colorBlind, symbol) {
       }
       else{
         for(var [idx, ele]  of edges){
-          if(symbol == "True" && symbols.has(getSrc(ele)))
+          if(symbol == "True"){
+            symbols.set(getOriginSrc(ele), ele)
             sendImg(ele, "runSymbol", colorBlind)
+          }
           else
             returnImg(ele)
         }
@@ -121,8 +131,10 @@ function refreshSymbol(symbol, colorBlind, edge) {
     }
     else{
       for(var [idx, ele]  of symbols){
-        if(edge == "True" && edges.has(getSrc(ele)))
+        if(edge == "True"){
+          edges.set(getOriginSrc(ele), ele)
           sendImg(ele, "runEdge", colorBlind)
+        }
         else
           returnImg(ele)
       }
@@ -145,13 +157,13 @@ function findAndDoEdge(blind){
   const elements = Array.from(document.querySelectorAll("img"))
   elements.forEach((ele)=>{
     if(ele.width >= 50 && ele.height >= 50 || true){
-      edges.set(getSrc(ele), ele)
+      edges.set(getOriginSrc(ele), ele)
     }
   })
   //console.log(edges)
 
   for(var [idx, ele]  of edges.entries()){
-    if(symbols.has(getSrc(ele))){
+    if(symbols.has(getOriginSrc(ele))){
       console.log("both found")
       sendImg(ele, "runBoth", blind)
     }
@@ -166,20 +178,28 @@ function returnImg(ele){
     ele.src = ele.originSrc
 }
 
-function getSrc(ele){
+function getOriginSrc(ele){
   if(ele.originSrc) return ele.originSrc
   return ele.src == "" ? ele.dataset.src:ele.src
 }
+function getSrc(ele){
+  return ele.src == "" ? ele.dataset.src:ele.src
+}
 
-function sendImg(imgEle, cmd, blind){
+function sendImg(imgEle, cmd, blind, isBoth){
     if(curCnt < maxCnt){      
       //console.log('send')
-      let src = getSrc(imgEle)
+      let src
+      if(isBoth)
+        src = getSrc(imgEle)
+      else
+        src = getOriginSrc(imgEle)
       console.log(src)
-      imgEle.originSrc = src
+      imgEle.originSrc = getOriginSrc(imgEle)
       chrome.runtime.sendMessage({
         cmd: cmd,
         src: src,
+        originSrc:imgEle.originSrc,
         colorBlind: blind
       });
       curCnt++
