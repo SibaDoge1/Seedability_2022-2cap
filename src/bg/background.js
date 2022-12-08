@@ -56,81 +56,89 @@ function edge_detection(x, isMat){
     src = x;
   else
     src = cv.imread(x);
-  
-  //mask
-  let dst = new cv.Mat();
-  let dst2 = new cv.Mat();
-  let dst3 = new cv.Mat();
-
-  //symbol
-  let y = cv.imread(imgPattern);
-  let y2 = cv.imread(imgPattern2);
-  let y3 = cv.imread(imgPattern3);
-
-  //변경할 사이즈(imgElement로부터 받아옴)
-  //let dsize = new cv.Size(x.width, x.height);
-  
-  //resize
-  //cv.resize(y, rsize, dsize, 0, 0, cv.INTER_AREA);
-  //cv.resize(y2, rsize2, dsize, 0, 0, cv.INTER_AREA);
 
 
-  //color space
-  let low = new cv.Mat(src.rows, src.cols, src.type(), [128, 0, 0, 0]);
-  let high = new cv.Mat(src.rows, src.cols, src.type(),  [255, 160, 147, 255]);
+    //mask
+    let dst = new cv.Mat();
+    let dst2 = new cv.Mat();
+    let dst3 = new cv.Mat();
 
-  let low2 = new cv.Mat(src.rows, src.cols, src.type(), [0, 100, 0, 0]);
-  let high2 = new cv.Mat(src.rows, src.cols, src.type(),  [152, 255, 170, 255]);
+    //symbol
+    let y = cv.imread(imgPattern);
+    let y2 = cv.imread(imgPattern2);
+    let y3 = cv.imread(imgPattern3);
 
-  //cv.inRange(src, l, h, dst);
+    //let rcsize = new cv.Mat();
+    //let csize = new cv.Size(1000, 1000);
 
-  cv.inRange(src, low, high, dst);
-  cv.inRange(src, low2, high2, dst2);
-  //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
-
-
-  //inrange
-  //cv.inRange(src, low, high, dst);
-  //cv.inRange(src, low2, high2, dst2);
-
-  //mask
-  let mask_inv = new cv.Mat();
-  let mask_inv2 = new cv.Mat();
+    //cv.resize(src, rcsize, csize, 0, 0, cv.INTER_AREA);
+    //cv.imshow('canvasOutput', rcsize);
 
 
-  //bitwise_not
-  cv.bitwise_not(dst, mask_inv);
-  cv.bitwise_not(dst2, mask_inv2);
+    //변경할 사이즈(imgElement로부터 받아옴)
+    //let dsize = new cv.Size(x.width, x.height);
+    
+    //resize
+    //cv.resize(y, rsize, dsize, 0, 0, cv.INTER_AREA);
+    //cv.resize(y2, rsize2, dsize, 0, 0, cv.INTER_AREA);
 
-  let edge = new cv.Mat();
-  cv.Canny(dst, edge, 50, 100, 3, false);
 
-  let edge_dst = new cv.Mat();
-  cv.cvtColor(edge, edge_dst, cv.COLOR_GRAY2RGBA, 0);
+    //color space
+    //let low = new cv.Mat(src.rows, src.cols, src.type(), [128, 0, 0, 0]);
+    //let high = new cv.Mat(src.rows, src.cols, src.type(),  [255, 160, 147, 255]);
 
-  let src_edge = new cv.Mat();
+    //let low2 = new cv.Mat(src.rows, src.cols, src.type(), [0, 100, 0, 0]);
+    //let high2 = new cv.Mat(src.rows, src.cols, src.type(),  [152, 255, 170, 255]);
 
-  cv.add(edge_dst, src, src_edge);
-  
-  //edge표시
- // cv.imshow('canvasOutput', src_edge);
+    //cv.inRange(src, l, h, dst);
 
-  //delete all
-  src.delete();
-  dst.delete();
-  dst2.delete();
-  dst3.delete();
-  y.delete();
-  y2.delete();
-  y3.delete();
-  low.delete();
-  low2.delete();
-  high.delete();
-  high2.delete();
-  mask_inv.delete();
-  mask_inv2.delete();
+    //cv.inRange(src, low, high, dst);
+    //cv.inRange(src, low2, high2, dst2);
+    //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
-  return src_edge;
+
+    //inrange
+    //cv.inRange(src, low, high, dst);
+    //cv.inRange(src, low2, high2, dst2);
+
+    //mask
+    //let mask_inv = new cv.Mat();
+    //let mask_inv2 = new cv.Mat();
+
+
+    //bitwise_not
+    //cv.bitwise_not(dst, mask_inv);
+    //cv.bitwise_not(dst2, mask_inv2);
+
+    let edge = new cv.Mat();
+    cv.Canny(src, edge, 50, 100, 3, false);
+
+    let edge_dst = new cv.Mat();
+    cv.cvtColor(edge, edge_dst, cv.COLOR_GRAY2RGBA, 0);
+
+    let src_edge = new cv.Mat();
+
+    cv.add(edge_dst, src, src_edge);
+    
+    //edge표시
+  // cv.imshow('canvasOutput', src_edge);
+
+    //delete all
+    src.delete();
+    dst.delete();
+    dst2.delete();
+    dst3.delete();
+    y.delete();
+    y2.delete();
+    y3.delete();
+    //low.delete();
+    //low2.delete();
+    //high.delete();
+    //high2.delete();
+    //mask_inv.delete();
+    //mask_inv2.delete();
+
+    return src_edge;
 }
 
 
