@@ -24,6 +24,7 @@ function get_mask(x, l, h, imgP){
     //symbol
     let y = cv.imread(imgP);
 
+
     //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
     let rsize = new cv.Mat();
 
@@ -82,16 +83,16 @@ function edge_detection(x){
 
 
     //color space
-    let low = new cv.Mat(src.rows, src.cols, src.type(), [128, 0, 0, 0]);
-    let high = new cv.Mat(src.rows, src.cols, src.type(),  [255, 160, 147, 255]);
+    //let low = new cv.Mat(src.rows, src.cols, src.type(), [128, 0, 0, 0]);
+    //let high = new cv.Mat(src.rows, src.cols, src.type(),  [255, 160, 147, 255]);
 
-    let low2 = new cv.Mat(src.rows, src.cols, src.type(), [0, 100, 0, 0]);
-    let high2 = new cv.Mat(src.rows, src.cols, src.type(),  [152, 255, 170, 255]);
+    //let low2 = new cv.Mat(src.rows, src.cols, src.type(), [0, 100, 0, 0]);
+    //let high2 = new cv.Mat(src.rows, src.cols, src.type(),  [152, 255, 170, 255]);
 
     //cv.inRange(src, l, h, dst);
 
-    cv.inRange(src, low, high, dst);
-    cv.inRange(src, low2, high2, dst2);
+    //cv.inRange(src, low, high, dst);
+    //cv.inRange(src, low2, high2, dst2);
     //dst2, rsize2 = get_mask(x, low2, high2, imgPattern);
 
 
@@ -100,16 +101,16 @@ function edge_detection(x){
     //cv.inRange(src, low2, high2, dst2);
 
     //mask
-    let mask_inv = new cv.Mat();
-    let mask_inv2 = new cv.Mat();
+    //let mask_inv = new cv.Mat();
+    //let mask_inv2 = new cv.Mat();
 
 
     //bitwise_not
-    cv.bitwise_not(dst, mask_inv);
-    cv.bitwise_not(dst2, mask_inv2);
+    //cv.bitwise_not(dst, mask_inv);
+    //cv.bitwise_not(dst2, mask_inv2);
 
     let edge = new cv.Mat();
-    cv.Canny(dst, edge, 50, 100, 3, false);
+    cv.Canny(src, edge, 50, 100, 3, false);
 
     let edge_dst = new cv.Mat();
     cv.cvtColor(edge, edge_dst, cv.COLOR_GRAY2RGBA, 0);
@@ -129,12 +130,12 @@ function edge_detection(x){
     y.delete();
     y2.delete();
     y3.delete();
-    low.delete();
-    low2.delete();
-    high.delete();
-    high2.delete();
-    mask_inv.delete();
-    mask_inv2.delete();
+    //low.delete();
+    //low2.delete();
+    //high.delete();
+    //high2.delete();
+    //mask_inv.delete();
+    //mask_inv2.delete();
 
     return src_edge;
 }
@@ -157,6 +158,8 @@ function add_pattern(x){
     //사이즈가 변경된 패턴 이미지가 rsize에 저장됨
     let rsize = new cv.Mat();
     let rsize2 = new cv.Mat();
+
+
 
     //변경할 사이즈(imgElement로부터 받아옴)
     //let dsize = new cv.Size(x.width, x.height);
